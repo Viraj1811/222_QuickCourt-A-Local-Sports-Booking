@@ -9,7 +9,7 @@ const ownerVenues = venues.filter(v => v.owner.id === 101);
 
 export default function Dashboard() {
   const allReviews = ownerVenues.flatMap(venue => 
-    venue.reviews.map(review => ({...review, venueName: venue.name}))
+    venue.reviews.map(review => ({...review, venueId: venue.id, venueName: venue.name}))
   );
 
   return (
@@ -61,7 +61,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-6">
             {allReviews.map(review => (
-              <ReviewResponseGenerator key={review.id} review={review} venueName={review.venueName} />
+              <ReviewResponseGenerator key={`${review.venueId}-${review.id}`} review={review} venueName={review.venueName} />
             ))}
           </CardContent>
         </Card>
