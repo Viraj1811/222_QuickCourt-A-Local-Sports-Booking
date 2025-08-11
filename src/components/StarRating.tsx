@@ -10,7 +10,6 @@ type StarRatingProps = {
   className?: string;
   size?: "sm" | "md" | "lg";
 };
-
 export default function StarRating({
   rating,
   onRatingChange,
