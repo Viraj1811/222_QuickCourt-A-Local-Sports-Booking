@@ -31,14 +31,15 @@ export default function Home() {
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
           Discover top-tier sports venues for your next game. Search by location, sport, and more to find exactly what you need.
         </p>
-        <div className="mt-8 max-w-3xl mx-auto">
+        <form action="/search" method="GET" className="mt-8 max-w-3xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 bg-background p-4 rounded-lg border">
             <Input
               type="text"
+              name="q"
               placeholder="Search by name or area..."
               className="md:col-span-2 h-12 text-base"
             />
-            <Select>
+            <Select name="sport">
               <SelectTrigger className="h-12 text-base">
                 <SelectValue placeholder="Select a sport" />
               </SelectTrigger>
@@ -49,12 +50,12 @@ export default function Home() {
                 <SelectItem value="football">Football</SelectItem>
               </SelectContent>
             </Select>
-            <Button size="lg" className="h-12 text-base bg-accent hover:bg-accent/90">
+            <Button type="submit" size="lg" className="h-12 text-base bg-accent hover:bg-accent/90">
               <Search className="mr-2 h-5 w-5" />
               Search
             </Button>
           </div>
-        </div>
+        </form>
       </section>
 
       <section>
