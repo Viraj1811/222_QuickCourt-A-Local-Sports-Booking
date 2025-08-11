@@ -4,7 +4,7 @@ import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, S
 import Logo from "@/components/shared/Logo";
 import { LayoutDashboard, Star, BookOpen, Settings, LogOut, Building, BarChart2, Clock, Ticket, User as UserIcon } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";   
 
 export default function DashboardLayout({
   children,

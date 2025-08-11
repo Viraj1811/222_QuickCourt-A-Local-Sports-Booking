@@ -8,7 +8,6 @@
  * - `GenerateReviewResponseInput`: The input type for the generateReviewResponse function, defining the structure of the user review data.
  * - `GenerateReviewResponseOutput`: The output type for the generateReviewResponse function, defining the structure of the generated response.
  */
-
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
@@ -17,7 +16,7 @@ const GenerateReviewResponseInputSchema = z.object({
   reviewContent: z
     .string()
     .describe('The content of the user review for the facility.'),
-});
+}); 
 
 // Define the TypeScript type for the input schema
 export type GenerateReviewResponseInput = z.infer<
