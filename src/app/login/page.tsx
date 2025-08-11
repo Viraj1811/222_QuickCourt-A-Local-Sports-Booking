@@ -7,14 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Shield } from "lucide-react";
+import { User, Shield, UserCog } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [role, setRole] = useState<'player' | 'owner' | null>(null);
+  const [role, setRole] = useState<'player' | 'owner' | 'admin' | null>(null);
 
   const handleLogin = () => {
     if (!role) {
@@ -33,7 +33,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex justify-center items-center py-12">
-      <Card className="w-full max-w-md shadow-xl">
+      <Card className="w-full max-w-lg shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">Welcome Back!</CardTitle>
           <CardDescription>Login to continue to CourtLink</CardDescription>
@@ -57,7 +57,7 @@ export default function LoginPage() {
             
             <div className="space-y-2">
                 <Label>Select your role</Label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                     <Button 
                       variant={role === 'player' ? 'default' : 'outline'}
                       onClick={() => setRole('player')}
@@ -72,7 +72,15 @@ export default function LoginPage() {
                        className="h-14 text-lg"
                     >
                         <Shield className="mr-2" />
-                        Venue Owner
+                        Owner
+                    </Button>
+                     <Button 
+                       variant={role === 'admin' ? 'default' : 'outline'}
+                       onClick={() => setRole('admin')}
+                       className="h-14 text-lg"
+                    >
+                        <UserCog className="mr-2" />
+                        Admin
                     </Button>
                 </div>
             </div>

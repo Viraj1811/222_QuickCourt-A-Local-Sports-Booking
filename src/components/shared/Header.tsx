@@ -19,7 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, User, LogOut, LayoutDashboard, UserCircle } from "lucide-react";
+import { Menu, User, LogOut, LayoutDashboard, UserCircle, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/shared/Logo";
 import { useState, useEffect } from "react";
@@ -56,7 +56,7 @@ export default function Header() {
 
 
   const NavLink = ({ href, label, inSheet = false }: { href: string; label: string, inSheet?: boolean }) => {
-    const isActive = pathname === href;
+    const isActive = pathname.startsWith(href) && (href !== '/' || pathname === '/');
     const link = (
         <Link href={href} className={cn(
             "font-medium transition-colors hover:text-primary",
@@ -83,6 +83,7 @@ export default function Header() {
             <NavLink key={link.href} {...link} />
           ))}
           {isLoggedIn && userRole === 'owner' && <NavLink href="/owner/dashboard" label="Owner Dashboard" />}
+          {isLoggedIn && userRole === 'admin' && <NavLink href="/admin/dashboard" label="Admin Dashboard" />}
         </nav>
         <div className="flex items-center gap-4">
           <div className="hidden md:block">
@@ -90,7 +91,7 @@ export default function Header() {
                <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                    <Avatar className="cursor-pointer">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="User" data-ai-hint="person user" />
+                    <AvatarImage src="https://placehold.co/100x100.png" alt="User" data-ai-hint="person user"/>
                     <AvatarFallback>
                       <User />
                     </AvatarFallback>
@@ -99,8 +100,13 @@ export default function Header() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild><Link href="/profile"><UserCircle className="mr-2"/>Profile</Link></DropdownMenuItem>
-                  {userRole === 'owner' && <DropdownMenuItem asChild><Link href="/owner/dashboard"><LayoutDashboard className="mr-2"/>Dashboard</Link></DropdownMenuItem>}
+                  <DropdownMenuItem asChild>
+                    <Link href={userRole === 'owner' ? '/owner/profile' : (userRole === 'admin' ? '/admin/profile' : '/profile')}>
+                        <UserCircle className="mr-2"/>Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  {userRole === 'owner' && <DropdownMenuItem asChild><Link href="/owner/dashboard"><LayoutDashboard className="mr-2"/>Owner Dashboard</Link></DropdownMenuItem>}
+                  {userRole === 'admin' && <DropdownMenuItem asChild><Link href="/admin/dashboard"><Shield className="mr-2"/>Admin Dashboard</Link></DropdownMenuItem>}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-500 cursor-pointer"><LogOut className="mr-2"/>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
@@ -125,8 +131,9 @@ export default function Header() {
                 ))}
                  {isLoggedIn ? (
                    <>
-                    <NavLink href="/profile" label="My Profile" inSheet />
+                    <NavLink href={userRole === 'owner' ? '/owner/profile' : (userRole === 'admin' ? '/admin/profile' : '/profile')} label="My Profile" inSheet />
                     {userRole === 'owner' && <NavLink href="/owner/dashboard" label="Owner Dashboard" inSheet />}
+                    {userRole === 'admin' && <NavLink href="/admin/dashboard" label="Admin Dashboard" inSheet />}
                     <Button variant="destructive" onClick={() => {
                       const sheetClose = document.querySelector('[data-radix-dialog-close]');
                       (sheetClose as HTMLElement)?.click();

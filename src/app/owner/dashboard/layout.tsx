@@ -1,4 +1,5 @@
 
+
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import Logo from "@/components/shared/Logo";
 import { LayoutDashboard, Star, BookOpen, Settings, LogOut, Building, BarChart2, Clock, Ticket, User as UserIcon } from "lucide-react";
@@ -68,7 +69,7 @@ export default function DashboardLayout({
              </Button>
           </div>
         </Sidebar>
-        <main className="flex-1 p-6 bg-background rounded-lg">
+        <main className="flex-1 p-6 bg-secondary/20 rounded-lg">
           {children}
         </main>
       </div>

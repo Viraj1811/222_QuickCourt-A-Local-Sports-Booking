@@ -33,6 +33,8 @@ export default function VerifyOtpPage() {
     
     if (role === 'owner') {
       router.push("/owner/dashboard");
+    } else if (role === 'admin') {
+      router.push("/admin/dashboard");
     } else {
       router.push("/bookings");
     }
