@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useFormStatus } from "react";
 import { getReviewResponse } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +27,7 @@ function SubmitButton() {
 }
 
 export default function ReviewResponseGenerator({ review, venueName }: { review: Review, venueName: string }) {
-  const [state, formAction] = useFormState(getReviewResponse, initialState);
+  const [state, formAction] = useActionState(getReviewResponse, initialState);
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
