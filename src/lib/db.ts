@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+import { Pool } from '@neondatabase/serverless';
 import * as schema from './schema';
 
 if (!process.env.POSTGRES_URL) {
