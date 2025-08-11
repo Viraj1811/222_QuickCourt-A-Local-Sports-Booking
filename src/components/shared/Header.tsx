@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -56,17 +57,21 @@ export default function Header() {
 
   const NavLink = ({ href, label, inSheet = false }: { href: string; label: string, inSheet?: boolean }) => {
     const isActive = pathname === href;
-    return (
-      <SheetClose asChild>
+    const link = (
         <Link href={href} className={cn(
-            "font-medium transition-colors hover:text-primary", 
+            "font-medium transition-colors hover:text-primary",
             isActive ? "text-primary" : "text-muted-foreground",
             inSheet ? "text-lg" : "text-sm",
             )}>
           {label}
         </Link>
-      </SheetClose>
     );
+
+    if (inSheet) {
+        return <SheetClose asChild>{link}</SheetClose>;
+    }
+
+    return link;
   };
 
   return (
