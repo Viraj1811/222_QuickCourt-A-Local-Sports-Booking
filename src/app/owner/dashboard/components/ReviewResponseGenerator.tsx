@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useFormStatus } from "react";
+import { useActionState, useRef } from "react";
+import { useFormStatus } from "react-dom";
 import { getReviewResponse } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import StarRating from "@/components/StarRating";
 import type { Review } from "@/lib/types";
 import { Bot, CornerDownLeft, Loader2 } from "lucide-react";
-import { useEffect, useRef } from "react";
 
 const initialState = {
   message: "",
