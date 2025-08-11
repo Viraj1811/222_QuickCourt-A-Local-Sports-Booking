@@ -10,58 +10,46 @@ import { User, Shield } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [role, setRole] = useState<'player' | 'owner' | null>(null);
+  const [role, setRole] = useState<'player' | 'owner'>('player');
 
-  const handleLogin = () => {
-    // In a real app, this would involve an actual authentication flow.
-    // For this simulation, we'll use localStorage.
-    if (!role) {
-      toast({
-        title: "Error",
-        description: "Please select a role.",
-        variant: "destructive"
-      })
-      return;
-    }
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userRole", role);
-    
-    if (role === 'owner') {
-      router.push("/owner/dashboard");
-    } else {
-      router.push("/bookings");
-    }
+  const handleSignup = () => {
+    // In a real app, this would involve creating a new user and an authentication flow.
+    // For this simulation, we'll just show a success message and redirect.
+    toast({
+        title: "Account Created!",
+        description: "You have been successfully signed up.",
+      });
+    router.push("/login");
   };
 
   return (
     <div className="flex justify-center items-center py-12">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-headline">Welcome Back!</CardTitle>
-          <CardDescription>Login to continue to CourtLink</CardDescription>
+          <CardTitle className="text-3xl font-headline">Create an Account</CardTitle>
+          <CardDescription>Join CourtLink today!</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="name@example.com" defaultValue="player@example.com" />
+               <div className="space-y-2">
+                <Label htmlFor="name">Full Name</Label>
+                <Input id="name" type="text" placeholder="John Doe" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link href="/forgot-password" prefetch={false} className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <Input id="password" type="password" defaultValue="password" />
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" placeholder="name@example.com" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" type="password" />
               </div>
             </div>
             
             <div className="space-y-2">
-                <Label>Select your role</Label>
+                <Label>I am a...</Label>
                 <div className="grid grid-cols-2 gap-4">
                     <Button 
                       variant={role === 'player' ? 'default' : 'outline'}
@@ -82,12 +70,12 @@ export default function LoginPage() {
                 </div>
             </div>
             
-            <Button size="lg" className="w-full h-12 text-lg" onClick={handleLogin}>
-              Login
+            <Button size="lg" className="w-full h-12 text-lg" onClick={handleSignup}>
+              Sign Up
             </Button>
         </CardContent>
         <CardFooter className="text-center text-sm text-muted-foreground justify-center">
-            Don't have an account? <Link href="/signup" prefetch={false} className="text-primary hover:underline ml-1">Sign up</Link>
+            Already have an account? <Link href="/login" prefetch={false} className="text-primary hover:underline ml-1">Login</Link>
         </CardFooter>
       </Card>
     </div>

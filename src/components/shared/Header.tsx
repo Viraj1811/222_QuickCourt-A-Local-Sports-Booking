@@ -1,15 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetClose
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Menu, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, User, LogOut, LayoutDashboard, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/shared/Logo";
 import { useState, useEffect } from "react";
@@ -17,26 +26,46 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/bookings", label: "My Bookings" },
-  { href: "/owner/dashboard", label: "For Owners" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     // In a real app, you'd check a token or session
     if (typeof window !== 'undefined') {
-      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+      setIsLoggedIn(loggedInStatus);
+      if(loggedInStatus) {
+        setUserRole(localStorage.getItem("userRole"));
+      }
     }
-  }, []);
+  }, [pathname]); // Rerun on path change to update login status
 
-  const NavLink = ({ href, label }: { href: string; label: string }) => {
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userRole");
+    setIsLoggedIn(false);
+    setUserRole(null);
+    router.push("/login");
+  };
+
+
+  const NavLink = ({ href, label, inSheet = false }: { href: string; label: string, inSheet?: boolean }) => {
     const isActive = pathname === href;
     return (
-      <Link href={href} className={cn("text-lg font-medium transition-colors hover:text-primary", isActive ? "text-primary" : "text-muted-foreground")}>
-        {label}
-      </Link>
+      <SheetClose asChild>
+        <Link href={href} className={cn(
+            "font-medium transition-colors hover:text-primary", 
+            isActive ? "text-primary" : "text-muted-foreground",
+            inSheet ? "text-lg" : "text-sm",
+            )}>
+          {label}
+        </Link>
+      </SheetClose>
     );
   };
 
@@ -48,16 +77,29 @@ export default function Header() {
           {navLinks.map((link) => (
             <NavLink key={link.href} {...link} />
           ))}
+          {isLoggedIn && userRole === 'owner' && <NavLink href="/owner/dashboard" label="Owner Dashboard" />}
         </nav>
         <div className="flex items-center gap-4">
           <div className="hidden md:block">
             {isLoggedIn ? (
-              <Avatar>
-                <AvatarImage src="https://placehold.co/100x100.png" alt="User" />
-                <AvatarFallback>
-                  <User />
-                </AvatarFallback>
-              </Avatar>
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                   <Avatar className="cursor-pointer">
+                    <AvatarImage src="https://placehold.co/100x100.png" alt="User" data-ai-hint="person user" />
+                    <AvatarFallback>
+                      <User />
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild><Link href="/profile"><UserCircle className="mr-2"/>Profile</Link></DropdownMenuItem>
+                  {userRole === 'owner' && <DropdownMenuItem asChild><Link href="/owner/dashboard"><LayoutDashboard className="mr-2"/>Dashboard</Link></DropdownMenuItem>}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-500 cursor-pointer"><LogOut className="mr-2"/>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Link href="/login">
                 <Button>Login / Sign Up</Button>
@@ -74,14 +116,24 @@ export default function Header() {
             <SheetContent side="right">
               <div className="flex flex-col space-y-6 pt-10">
                 {navLinks.map((link) => (
-                  <NavLink key={link.href} {...link} />
+                  <NavLink key={link.href} {...link} inSheet />
                 ))}
                  {isLoggedIn ? (
-                  <Button variant="outline">My Account</Button>
+                   <>
+                    <NavLink href="/profile" label="My Profile" inSheet />
+                    {userRole === 'owner' && <NavLink href="/owner/dashboard" label="Owner Dashboard" inSheet />}
+                    <Button variant="destructive" onClick={() => {
+                      const sheetClose = document.querySelector('[data-radix-dialog-close]');
+                      (sheetClose as HTMLElement)?.click();
+                      handleLogout();
+                    }}>Logout</Button>
+                   </>
                 ) : (
-                  <Link href="/login" className="w-full">
-                    <Button className="w-full">Login / Sign Up</Button>
-                  </Link>
+                  <SheetClose asChild>
+                    <Link href="/login" className="w-full">
+                      <Button className="w-full">Login / Sign Up</Button>
+                    </Link>
+                  </SheetClose>
                 )}
               </div>
             </SheetContent>
