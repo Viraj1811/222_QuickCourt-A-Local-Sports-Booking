@@ -16,7 +16,7 @@ const GenerateReviewResponseInputSchema = z.object({
   reviewContent: z
     .string()
     .describe('The content of the user review for the facility.'),
-});
+}); 
 
 // Define the TypeScript type for the input schema
 export type GenerateReviewResponseInput = z.infer<
