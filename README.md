@@ -7,7 +7,7 @@
 ---
 
 ## 👥 Team Information
-**Team Number:** 222
+**Team Number:** 222 
 **Team Name:** AlgoWarriors  
 **Project Title:** QuickCourt – Local Sports Booking
 
