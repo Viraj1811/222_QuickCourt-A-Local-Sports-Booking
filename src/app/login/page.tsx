@@ -5,35 +5,46 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Shield, UserCog } from "lucide-react";
+import { User, Shield, UserCog, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { sendOtpAction } from "@/app/actions";
+
+const initialState = {
+  message: "",
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button size="lg" className="w-full h-12 text-lg" type="submit" disabled={pending}>
+       {pending ? <Loader2 className="mr-2 animate-spin" /> : null}
+       Send OTP
+    </Button>
+  );
+}
+
 
 export default function LoginPage() {
-  const router = useRouter();
   const { toast } = useToast();
-  const [role, setRole] = useState<'player' | 'owner' | 'admin' | null>(null);
+  const [role, setRole] = useState<'player' | 'owner' | 'admin'>('player');
+  const [state, formAction] = useActionState(sendOtpAction, initialState);
 
-  const handleLogin = () => {
-    if (!role) {
+  if (state?.message && state.message !== initialState.message) {
       toast({
-        title: "Error",
-        description: "Please select a role.",
-        variant: "destructive"
-      })
-      return;
-    }
-    // In a real app, this would involve an actual authentication flow.
-    // For this simulation, we'll just redirect to OTP verification.
-    localStorage.setItem("userRole", role);
-    router.push("/verify-otp");
-  };
+          title: "Error",
+          description: state.message,
+          variant: "destructive"
+      });
+  }
 
   return (
     <div className="flex justify-center items-center py-12">
       <Card className="w-full max-w-lg shadow-xl">
+       <form action={formAction}>
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-headline">Welcome Back!</CardTitle>
           <CardDescription>Login to continue to CourtLink</CardDescription>
@@ -42,23 +53,16 @@ export default function LoginPage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="name@example.com" defaultValue="player@example.com" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link href="/forgot-password" prefetch={false} className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-                <Input id="password" type="password" defaultValue="password" />
+                <Input id="email" name="email" type="email" placeholder="name@example.com" defaultValue="player@example.com" required/>
               </div>
             </div>
             
             <div className="space-y-2">
                 <Label>Select your role</Label>
+                 <input type="hidden" name="role" value={role} />
                 <div className="grid grid-cols-3 gap-4">
                     <Button 
+                      type="button"
                       variant={role === 'player' ? 'default' : 'outline'}
                       onClick={() => setRole('player')}
                       className="h-14 text-lg"
@@ -67,6 +71,7 @@ export default function LoginPage() {
                         Player
                     </Button>
                     <Button 
+                       type="button"
                        variant={role === 'owner' ? 'default' : 'outline'}
                        onClick={() => setRole('owner')}
                        className="h-14 text-lg"
@@ -75,6 +80,7 @@ export default function LoginPage() {
                         Owner
                     </Button>
                      <Button 
+                       type="button"
                        variant={role === 'admin' ? 'default' : 'outline'}
                        onClick={() => setRole('admin')}
                        className="h-14 text-lg"
@@ -85,10 +91,9 @@ export default function LoginPage() {
                 </div>
             </div>
             
-            <Button size="lg" className="w-full h-12 text-lg" onClick={handleLogin}>
-              Send OTP
-            </Button>
+            <SubmitButton />
         </CardContent>
+        </form>
         <CardFooter className="text-center text-sm text-muted-foreground justify-center">
             Don't have an account? <Link href="/signup" prefetch={false} className="text-primary hover:underline ml-1">Sign up</Link>
         </CardFooter>
