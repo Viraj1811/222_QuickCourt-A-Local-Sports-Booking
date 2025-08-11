@@ -8,7 +8,6 @@
  * - `GenerateReviewResponseInput`: The input type for the generateReviewResponse function, defining the structure of the user review data.
  * - `GenerateReviewResponseOutput`: The output type for the generateReviewResponse function, defining the structure of the generated response.
  */
-
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
