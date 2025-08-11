@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -20,15 +21,43 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Ban, UserCheck, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-
-const users = [
+const initialUsers = [
     { id: 1, name: "Ravi Kumar", email: "ravi.kumar@example.com", role: "Player", status: "Active", avatar: "https://placehold.co/100x100.png" },
     { id: 2, name: "Mr. Owner", email: "owner@example.com", role: "Owner", status: "Active", avatar: "https://placehold.co/100x100.png" },
     { id: 3, name: "Priya Singh", email: "priya.singh@example.com", role: "Player", status: "Banned", avatar: "https://placehold.co/100x100.png" },
     { id: 101, name: "Admin User", email: "admin@example.com", role: "Admin", status: "Active", avatar: "https://placehold.co/100x100.png" },
 ];
 
+type User = typeof initialUsers[0];
+
 export default function UserManagementPage() {
+  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const handleToggleUserStatus = (userId: number) => {
+    setUsers(currentUsers =>
+      currentUsers.map(user =>
+        user.id === userId
+          ? { ...user, status: user.status === "Active" ? "Banned" : "Active" }
+          : user
+      )
+    );
+  };
+  
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => {
+      const searchMatch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
+      const roleMatch = roleFilter === 'all' || user.role === roleFilter;
+      const statusMatch = statusFilter === 'all' || user.status === statusFilter;
+      
+      return searchMatch && roleMatch && statusMatch;
+    });
+  }, [users, searchTerm, roleFilter, statusFilter]);
+
+
   return (
     <div className="space-y-8">
        <header>
@@ -38,33 +67,38 @@ export default function UserManagementPage() {
 
         <Card>
             <CardContent className="p-4">
-                <form className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
                     <div className="relative flex-grow">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Search by name or email..." className="pl-10" />
+                        <Input 
+                          placeholder="Search by name or email..." 
+                          className="pl-10" 
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
-                     <Select defaultValue="all">
+                     <Select value={roleFilter} onValueChange={setRoleFilter}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Filter by role" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Roles</SelectItem>
-                            <SelectItem value="player">Player</SelectItem>
-                            <SelectItem value="owner">Owner</SelectItem>
-                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="Player">Player</SelectItem>
+                            <SelectItem value="Owner">Owner</SelectItem>
+                            <SelectItem value="Admin">Admin</SelectItem>
                         </SelectContent>
                     </Select>
-                     <Select defaultValue="all">
+                     <Select value={statusFilter} onValueChange={setStatusFilter}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Filter by status" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">All Statuses</SelectItem>
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="banned">Banned</SelectItem>
+                            <SelectItem value="Active">Active</SelectItem>
+                            <SelectItem value="Banned">Banned</SelectItem>
                         </SelectContent>
                     </Select>
-                </form>
+                </div>
             </CardContent>
         </Card>
 
@@ -80,7 +114,7 @@ export default function UserManagementPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {users.map(user => (
+                        {filteredUsers.map(user => (
                             <TableRow key={user.id}>
                                 <TableCell className="font-medium">
                                     <div className="flex items-center gap-3">
@@ -102,12 +136,12 @@ export default function UserManagementPage() {
                                 </TableCell>
                                 <TableCell className="text-right">
                                     {user.status === 'Active' ? (
-                                        <Button variant="destructive" size="sm">
+                                        <Button variant="destructive" size="sm" onClick={() => handleToggleUserStatus(user.id)} disabled={user.role === 'Admin'}>
                                             <Ban className="mr-2 h-4 w-4" />
                                             Ban User
                                         </Button>
                                     ) : (
-                                         <Button variant="secondary" size="sm">
+                                         <Button variant="secondary" size="sm" onClick={() => handleToggleUserStatus(user.id)}>
                                             <UserCheck className="mr-2 h-4 w-4" />
                                             Unban User
                                         </Button>
