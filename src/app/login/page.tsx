@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -16,8 +17,6 @@ export default function LoginPage() {
   const [role, setRole] = useState<'player' | 'owner' | null>(null);
 
   const handleLogin = () => {
-    // In a real app, this would involve an actual authentication flow.
-    // For this simulation, we'll use localStorage.
     if (!role) {
       toast({
         title: "Error",
@@ -26,14 +25,10 @@ export default function LoginPage() {
       })
       return;
     }
-    localStorage.setItem("isLoggedIn", "true");
+    // In a real app, this would involve an actual authentication flow.
+    // For this simulation, we'll just redirect to OTP verification.
     localStorage.setItem("userRole", role);
-    
-    if (role === 'owner') {
-      router.push("/owner/dashboard");
-    } else {
-      router.push("/bookings");
-    }
+    router.push("/verify-otp");
   };
 
   return (
@@ -83,7 +78,7 @@ export default function LoginPage() {
             </div>
             
             <Button size="lg" className="w-full h-12 text-lg" onClick={handleLogin}>
-              Login
+              Send OTP
             </Button>
         </CardContent>
         <CardFooter className="text-center text-sm text-muted-foreground justify-center">

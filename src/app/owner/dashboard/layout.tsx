@@ -1,6 +1,7 @@
+
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import Logo from "@/components/shared/Logo";
-import { LayoutDashboard, Star, BookOpen, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Star, BookOpen, Settings, LogOut, Building, BarChart2, Clock, Ticket, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -24,18 +25,38 @@ export default function DashboardLayout({
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Reviews">
-                    <Link href="/owner/dashboard"><Star /><span>Reviews</span></Link>
+                <SidebarMenuButton asChild tooltip="Facility Management">
+                    <Link href="/owner/facility"><Building /><span>Facility</span></Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Bookings">
-                   <Link href="/owner/dashboard"><BookOpen /><span>Bookings</span></Link>
+                <SidebarMenuButton asChild tooltip="Court Management">
+                   <Link href="/owner/courts"><BarChart2 /><span>Courts</span></Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+               <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Time Slots">
+                   <Link href="/owner/slots"><Clock /><span>Time Slots</span></Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Bookings Overview">
+                   <Link href="/owner/bookings"><Ticket /><span>Bookings</span></Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Reviews">
+                    <Link href="/owner/reviews"><Star /><span>Reviews</span></Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+               <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Owner Profile">
+                   <Link href="/owner/profile"><UserIcon /><span>Profile</span></Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Settings">
-                   <Link href="/owner/dashboard"><Settings /><span>Settings</span></Link>
+                   <Link href="/owner/settings"><Settings /><span>Settings</span></Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

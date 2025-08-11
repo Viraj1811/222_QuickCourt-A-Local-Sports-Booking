@@ -2,15 +2,12 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getReviewsByOwnerId } from "@/lib/data";
-import ReviewResponseGenerator from "./ReviewResponseGenerator";
+import ReviewResponseGenerator from "../dashboard/components/ReviewResponseGenerator";
 import type { Review } from '@/lib/types';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 
-export default function Dashboard() {
+export default function ReviewsPage() {
   const [reviews, setReviews] = useState<{review: Review, venue: {id: number, name: string}}[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,20 +15,20 @@ export default function Dashboard() {
     // In a real app, you'd get the logged-in owner's ID
     const ownerId = 101; 
     getReviewsByOwnerId(ownerId).then(data => {
-        setReviews(data.slice(0, 2)); // Show only a couple of recent reviews on the dashboard
+        setReviews(data);
         setLoading(false);
     });
   }, []);
 
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+       <header>
+            <h1 className="text-4xl font-bold font-headline">Manage Reviews</h1>
+            <p className="text-muted-foreground">Respond to customer feedback and improve your service.</p>
+        </header>
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Reviews</CardTitle>
-            <CardDescription>A quick look at the latest feedback from your customers.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 pt-6">
              {loading ? (
               <p>Loading reviews...</p>
             ) : (
@@ -40,11 +37,6 @@ export default function Dashboard() {
                 ))
             )}
           </CardContent>
-          <div className="p-6 border-t">
-              <Link href="/owner/reviews">
-                  <Button variant="outline" className="w-full">View All Reviews</Button>
-              </Link>
-          </div>
         </Card>
     </div>
   );

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -16,13 +17,13 @@ export default function SignupPage() {
   const [role, setRole] = useState<'player' | 'owner'>('player');
 
   const handleSignup = () => {
-    // In a real app, this would involve creating a new user and an authentication flow.
-    // For this simulation, we'll just show a success message and redirect.
+    // In a real app, this would involve creating a new user.
+    // For this simulation, we'll just show a toast and redirect to OTP.
     toast({
-        title: "Account Created!",
-        description: "You have been successfully signed up.",
+        title: "OTP Sent!",
+        description: "An OTP has been sent to your email/phone.",
       });
-    router.push("/login");
+    router.push("/verify-otp");
   };
 
   return (
