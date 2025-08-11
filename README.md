@@ -7,10 +7,9 @@
 ---
 
 ## 👥 Team Information
-**Team Number:** 222 
-**Team Name:** AlgoWarriors  
-**Project Title:** QuickCourt – Local Sports Booking
-
+- **Team Number:** 222  
+- **Team Name:** AlgoWarriors  
+- **Project Title:** QuickCourt – Local Sports Booking  
 ### 👩‍💻 Team Members
 
 - **Viraj Vaghasiya** *(Team Leader)*  
