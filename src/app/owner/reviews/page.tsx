@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getReviewsByOwnerId } from "@/lib/data";
 import ReviewResponseGenerator from "../dashboard/components/ReviewResponseGenerator";
-import type { Review } from '@/lib/types';
+import type { Review } from '@/lib/types'; 
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState<{review: Review, venue: {id: number, name: string}}[]>([]);
