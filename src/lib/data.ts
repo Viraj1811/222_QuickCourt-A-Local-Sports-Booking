@@ -8,7 +8,7 @@ const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = 
     UtensilsCrossed: lucideIcons.UtensilsCrossed,
     Gamepad2: lucideIcons.Gamepad2,
     default: lucideIcons.Star,
-};
+}; 
 
 const mockReviews: Review[] = [
     { id: 1, user: 'Alice', userAvatar: 'https://placehold.co/100x100.png', rating: 5, comment: 'Amazing facility, clean and well-maintained. Will definitely come back!', date: '2023-10-01', response: 'Thank you, Alice! We are glad you enjoyed your visit.' },
