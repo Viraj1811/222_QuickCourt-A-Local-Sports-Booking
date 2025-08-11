@@ -22,7 +22,7 @@ const timeSlots = [
   "06:00 PM", "07:00 PM", "08:00 PM", "09:00 PM",
 ];
 
-export default function VenueBookingClient({ venue }: { venue: Venue }) {
+export default function VenueBookingClient({ venueName }: { venueName: string }) {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [bookingConfirmationOpen, setBookingConfirmationOpen] = useState(false);
@@ -76,7 +76,7 @@ export default function VenueBookingClient({ venue }: { venue: Venue }) {
                 </DialogDescription>
             </DialogHeader>
             <div className="space-y-2 mt-4">
-                <p className="flex items-center gap-2"><Tag className="w-4 h-4 text-primary" /> <strong>Venue:</strong> {venue.name}</p>
+                <p className="flex items-center gap-2"><Tag className="w-4 h-4 text-primary" /> <strong>Venue:</strong> {venueName}</p>
                 <p className="flex items-center gap-2"><CalendarIcon className="w-4 h-4 text-primary" /> <strong>Date:</strong> {date?.toLocaleDateString()}</p>
                 <p className="flex items-center gap-2"><Clock className="w-4 h-4 text-primary" /> <strong>Time:</strong> {selectedTime}</p>
             </div>

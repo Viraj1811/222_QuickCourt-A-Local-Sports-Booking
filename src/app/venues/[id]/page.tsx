@@ -101,7 +101,7 @@ export default async function VenueDetailsPage({ params }: { params: { id: strin
             </div>
 
             <div className="space-y-6">
-                <VenueBookingClient venue={venue} />
+                <VenueBookingClient venueName={venue.name} />
             </div>
           </div>
         </CardContent>
