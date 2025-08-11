@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 
 export default function AdminLayout({
   children,
+
+  
 }: {
   children: React.ReactNode;
 }) {
