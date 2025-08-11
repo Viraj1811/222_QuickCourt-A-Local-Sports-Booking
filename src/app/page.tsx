@@ -15,13 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { venues } from "@/lib/data";
+import { getAllVenues } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Star, Search } from "lucide-react";
 import StarRating from "@/components/StarRating";
 
-export default function Home() {
+export default async function Home() {
+  const venues = await getAllVenues();
   return (
     <div className="space-y-12">
       <section className="text-center bg-card p-8 rounded-xl shadow-md">

@@ -1,4 +1,4 @@
-"use client"
+
 import {
   Card,
   CardContent,
@@ -16,25 +16,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { venues } from "@/lib/data";
+import { searchVenues } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Star, Search } from "lucide-react";
 import StarRating from "@/components/StarRating";
-import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-function SearchResults() {
-    const searchParams = useSearchParams();
-    const query = searchParams.get('q') || '';
-    const sport = searchParams.get('sport');
-
-    const filteredVenues = venues.filter(venue => {
-        const nameMatches = venue.name.toLowerCase().includes(query.toLowerCase());
-        const locationMatches = venue.location.toLowerCase().includes(query.toLowerCase());
-        const sportMatches = sport ? venue.courts.some(c => c.sport.toLowerCase() === sport) : true;
-        return (nameMatches || locationMatches) && sportMatches;
-    });
+async function SearchResults({ query, sport }: { query: string; sport?: string }) {
+    const filteredVenues = await searchVenues(query, sport);
 
     return (
         <div className="space-y-12">
@@ -112,10 +102,11 @@ function SearchResults() {
     );
 }
 
-export default function SearchPage() {
+export default function SearchPage({ searchParams }: { searchParams: { q: string, sport: string }}) {
+    const { q, sport } = searchParams;
     return (
         <Suspense fallback={<div>Loading...</div>}>
-            <SearchResults />
+            <SearchResults query={q} sport={sport === 'all' ? undefined : sport} />
         </Suspense>
     )
 }

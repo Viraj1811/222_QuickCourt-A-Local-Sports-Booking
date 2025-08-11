@@ -1,16 +1,25 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { venues } from "@/lib/data";
+import { getReviewsByOwnerId } from "@/lib/data";
 import ReviewResponseGenerator from "./ReviewResponseGenerator";
-
-const ownerVenues = venues.filter(v => v.owner.id === 101);
+import type { Review } from '@/lib/types';
 
 export default function Dashboard() {
-  const allReviews = ownerVenues.flatMap(venue => 
-    venue.reviews.map(review => ({...review, venueId: venue.id, venueName: venue.name}))
-  );
+  const [reviews, setReviews] = useState<{review: Review, venue: {id: number, name: string}}[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // In a real app, you'd get the logged-in owner's ID
+    const ownerId = 101; 
+    getReviewsByOwnerId(ownerId).then(data => {
+        setReviews(data);
+        setLoading(false);
+    });
+  }, []);
+
 
   return (
     <Tabs defaultValue="reviews" className="w-full">
@@ -60,9 +69,13 @@ export default function Dashboard() {
             <CardDescription>Respond to customer feedback and improve your service.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {allReviews.map(review => (
-              <ReviewResponseGenerator key={`${review.venueId}-${review.id}`} review={review} venueName={review.venueName} />
-            ))}
+             {loading ? (
+              <p>Loading reviews...</p>
+            ) : (
+                reviews.map(item => (
+                <ReviewResponseGenerator key={`${item.venue.id}-${item.review.id}`} review={item.review} venueName={item.venue.name} />
+                ))
+            )}
           </CardContent>
         </Card>
       </TabsContent>

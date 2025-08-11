@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { bookings as mockBookings } from "@/lib/data";
+import { getBookingsByUserId } from "@/lib/data";
 import type { Booking } from "@/lib/types";
 import Image from "next/image";
 import { Calendar, Clock, Edit, Ban } from 'lucide-react';
@@ -20,7 +20,6 @@ import StarRating from '@/components/StarRating';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from "@/hooks/use-toast";
-
 
 function BookingCard({ booking }: { booking: Booking }) {
   const [isReviewOpen, setIsReviewOpen] = useState(false);
@@ -102,7 +101,21 @@ function BookingCard({ booking }: { booking: Booking }) {
 }
 
 export default function BookingsPage() {
-  const [bookings, setBookings] = useState<Booking[]>(mockBookings);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // In a real app, you'd get the logged-in user's ID
+    const userId = 1; // Assuming user ID is 1 for now
+    getBookingsByUserId(userId).then(data => {
+        setBookings(data as Booking[]);
+        setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <div>Loading bookings...</div>;
+  }
 
   const upcomingBookings = bookings.filter((b) => b.status === 'Upcoming');
   const completedBookings = bookings.filter((b) => b.status === 'Completed');
@@ -140,4 +153,3 @@ export default function BookingsPage() {
     </div>
   );
 }
-
